@@ -1,0 +1,117 @@
+{% extends base_template %}
+{% load static %}
+
+{% block title %} Dashboard {% endblock title %}
+{% block content %}
+
+<section class="section dashboard">
+    <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-12">
+            <div class="row">
+
+                <!-- Sales Card -->
+                <div class="col-xxl-12 col-md-12">
+                    <div class="card info-card sales-card">
+
+
+                        <div class="card-body">
+                            <h5 class="card-title"></h5>
+
+                            <!-- Table with stripped rows -->
+                            <table class="table table-striped">
+
+                                <tbody>
+                                {% for question in page.object_list %}
+                                <tr>
+                                    <td>
+                                        <p class="fw-bold fs-5">{{ question.question_text }}</p>
+
+                                        <ul>
+                                            {% for option in question.option_set.all %}
+                                            <li {% if option.is_correct %} class="fw-bold"{% endif %}>{{ option.option_text }}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td>
+                                        No questions available on this page.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+
+                            <!-- End Table with stripped rows -->
+
+                            <section>
+                                <!--
+                                  The htmx attributes set on the nav here are inherited by the child links.
+                                  hx-target tells where htmx to swap the fetched content in, and hx-swap
+                                  tells it how to swap it - by replacing the 'outerHTML' attribute of the
+                                  target, i.e. replacing the target's actual DOM node. hx-push-url tells
+                                  htmx to push the fetched URL into the browser history, so we can use
+                                  the backwards/forwards buttons to navigate these subpages.
+                                -->
+                                <nav hx-target="#main" hx-swap="outerHTML" hx-push-url="true"
+                                     class="d-flex justify-content-center">
+                                    <ul class="pagination">
+                                        {% if page.number != 1 %}
+                                        <li class="page-item">
+                                            <!--
+                                              For each link we use hx-get to tell htmx to fetch that URL and
+                                              swap it in. We also repeat the URL in the href attribute so the
+                                              page works without JavaScript, and to ensure the link is
+                                              displayed as clickable.
+                                            -->
+                                            <a class="page-link" hx-get="?page=1" href="?page=1">
+                                                &laquo; First
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if page.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" hx-get="?page={{ page.previous_page_number }}"
+                                               href="?page={{ page.previous_page_number }}">
+                                                {{ page.previous_page_number }}
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        <li class="page-item">
+                                            <span class="page-link fw-bold">{{ page.number }}</span>
+                                        </li>
+                                        {% if page.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" hx-get="?page={{ page.next_page_number }}"
+                                               href="?page={{ page.next_page_number }}">
+                                                {{ page.next_page_number }}
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {% if page.number != page.paginator.num_pages %}
+                                        <li class="page-item">
+                                            <a class="page-link" hx-get="?page={{ page.paginator.num_pages }}"
+                                               href="?page={{ page.paginator.num_pages }}">
+                                                &raquo; Last
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </section>
+                        </div>
+
+                    </div>
+                </div><!-- End Sales Card -->
+
+            </div>
+        </div><!-- End main columns -->
+
+    </div>
+</section>
+{% endblock content %}

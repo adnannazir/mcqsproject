@@ -5,8 +5,9 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>NiceAdmin | {% block title %}{% endblock title %}</title>
+    <meta name="htmx-config" content='{"historyCacheSize": 15}'>
 
-    <title>NiceAdmin {% block title %}{% endblock title %}</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -52,7 +53,7 @@
 {% endblock sidebar %}
 
 <main id="main" class="main">
-{% block content %}{% endblock content %}
+    {% block content %}{% endblock content %}
 </main>
 {% block footer %}
 {% include 'includes/footer.html' %}
