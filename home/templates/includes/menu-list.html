@@ -1,4 +1,13 @@
 <li class="nav-item">
+    <div class="search-bar nav-link ">
+        <form class="search-form d-flex align-items-center" method="POST" action="#">
+            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
+    </div><!-- End Search Bar -->
+</li>
+
+<li class="nav-item">
     <a class="nav-link " href="{% url 'home:dashboard' %}">
         <i class="bi bi-grid"></i>
         <span>Home</span>
