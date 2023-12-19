@@ -105,10 +105,11 @@
                                                 <input class="form-control" name="goto_page" type="number"
                                                        min="1" max="{{ page.paginator.num_pages }}"
                                                        placeholder="Enter a number">
-                                                <a href="#" class="btn btn-secondary" type="button"
-                                                   hx-get="page="
-                                                   hx-include="[name='goto_page']">Go
-                                                </a>
+
+                                                <button class="btn btn-outline-primary" type="button"
+                                                        hx-get="?page="
+                                                        hx-include="[name='goto_page']">Go
+                                                </button>
                                             </div>
                                         </li>
                                     </ul>
