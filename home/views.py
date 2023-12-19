@@ -12,6 +12,8 @@ from django_htmx.middleware import HtmxDetails
 from faker import Faker
 
 from home.models import Question, Category
+
+
 # from django.db.models import BooleanField, Case, When
 
 
@@ -33,7 +35,7 @@ def index(request):
     #     )
     # ).order_by('has_children', 'order', 'name')  # Order by has_children first, then other fields
 
-    categories = Category.objects.order_by( 'order')
+    categories = Category.objects.order_by('order')
     context = {
         'parent': '',
         'segment': 'dashboard',
@@ -42,21 +44,11 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-@dataclass
-class Person:
-    id: int
-    name: str
-
-
-faker = Faker()
-people = [Person(id=i, name=faker.name()) for i in range(1, 235)]
-
-
 @require_GET
-def partial_rendering(request: HtmxHttpRequest, category_id=None) -> HttpResponse:
+def main_page(request: HtmxHttpRequest, category_id=None) -> HttpResponse:
     # Retrieve questions from your database (example: getting all questions)
     questions = Question.objects.all()
-
+    categories = Category.objects.order_by('order')
     if category_id:
         # Filter questions by the provided category ID
         category = get_object_or_404(Category, id=category_id)
@@ -77,10 +69,11 @@ def partial_rendering(request: HtmxHttpRequest, category_id=None) -> HttpRespons
 
     return render(
         request,
-        "partial-rendering.html",
+        "mcqs.html",
         {
             "base_template": base_template,
             "page": page,
-            'letters': letters,
+            "categories": categories,
+            'segment': 'questions',
         },
     )

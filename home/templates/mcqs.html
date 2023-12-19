@@ -100,22 +100,17 @@
                                             </a>
                                         </li>
                                         {% endif %}
-                                <li class="page-item">
-    <div x-data="{ inputValue: 1 }" class="d-flex align-items-center">
-        <input class="form-control me-2" type="number" x-model="inputValue" min="1" max="{{ page.paginator.num_pages }}" placeholder="Enter a number">
-        <button class="btn btn-primary" @click="
-            let pageNumber = parseInt(inputValue);
-            if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= {{ page.paginator.num_pages }}) {
-                let content = document.querySelector('#main');
-                content.setAttribute('hx-get', `?page=${pageNumber}`);
-                content.click();
-            } else {
-                alert('Please enter a valid page number.');
-            }
-        " type="button">Go</button>
-    </div>
-</li>
-
+                                        <li class="page-item">
+                                            <div class="d-flex align-items-center">
+                                                <input class="form-control" name="goto_page" type="number"
+                                                       min="1" max="{{ page.paginator.num_pages }}"
+                                                       placeholder="Enter a number">
+                                                <a href="#" class="btn btn-secondary" type="button"
+                                                   hx-get="page="
+                                                   hx-include="[name='goto_page']">Go
+                                                </a>
+                                            </div>
+                                        </li>
                                     </ul>
                                 </nav>
                             </section>
