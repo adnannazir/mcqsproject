@@ -1,7 +1,7 @@
 {% extends base_template %}
 {% load static %}
 
-{% block title %} Dashboard {% endblock title %}
+{% block title %} Home {% endblock title %}
 {% block content %}
 
 <section class="section dashboard">
@@ -29,7 +29,7 @@
                                         <ul>
                                             {% for option in question.option_set.all %}
                                             <li {% if option.is_correct %} class="fw-bold" {% endif %}>
-                                                {{ "ABCDEF"|slice:forloop.counter|last }}. {{ option.option_text }}
+                                                 {{ "ABCDEF"|slice:forloop.counter|last }}. {{ option.option_text }}
                                             </li>
                                             {% endfor %}
                                         </ul>
@@ -102,6 +102,7 @@
                                         {% endif %}
                                         <li class="page-item">
                                             <div class="d-flex align-items-center">
+                                                <!--
                                                 <input class="form-control" name="goto_page" type="number"
                                                        min="1" max="{{ page.paginator.num_pages }}"
                                                        placeholder="Enter a number">
@@ -110,6 +111,10 @@
                                                         hx-get="?page="
                                                         hx-include="[name='goto_page']">Go
                                                 </button>
+                                                -->
+
+                                                <input name="page" type="number" min="1" max="{{ page.paginator.num_pages }}" placeholder="Enter a number">
+<button type="button" hx-get="" hx-include="[name='page']">Go</button>
                                             </div>
                                         </li>
                                     </ul>

@@ -1,8 +1,8 @@
 from string import ascii_uppercase
 
 from django.core.paginator import Paginator
-from django.db.models import Q
-from django.http import HttpRequest, HttpResponse
+from django.db.models import Q, Count
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
 
 from dataclasses import dataclass
@@ -58,7 +58,6 @@ def main_page(request: HtmxHttpRequest, category_id=None) -> HttpResponse:
     page_num = request.GET.get("page", "1")
     page = Paginator(object_list=questions, per_page=10).get_page(page_num)
 
-    letters = {index: chr(65 + index - 1) for index in range(1, 27)}  # Generating letters A-Z
     # The htmx magic - use a different, minimal base template for htmx
     # requests, allowing us to skip rendering the unchanging parts of the
     # template.
@@ -66,6 +65,9 @@ def main_page(request: HtmxHttpRequest, category_id=None) -> HttpResponse:
         base_template = "_partial.html"
     else:
         base_template = "layouts/base.html"
+
+    print( f"base template {base_template}, category = {category_id}")
+
 
     return render(
         request,
@@ -77,3 +79,19 @@ def main_page(request: HtmxHttpRequest, category_id=None) -> HttpResponse:
             'segment': 'questions',
         },
     )
+
+def chart(request):
+    # Retrieve the count of questions per category
+    categories_data = Question.objects.values('categories__name').annotate(question_count=Count('id'))
+
+    # Extracting labels and data for the chart
+    labels = [item['categories__name'] for item in categories_data]
+    data = [item['question_count'] for item in categories_data]
+
+    # Prepare chart data in a format Chart.js understands
+    chart_data = {
+        'labels': labels,
+        'data': data,
+    }
+
+    return JsonResponse(chart_data)
